@@ -6,7 +6,21 @@ import { PaperPlaneIcon } from "@radix-ui/react-icons";
 export default class App extends React.Component {
   state = {
     conversation: [],
+    question: '',
+    answer: '',
+    model: 'deepseek-r1-distill-llama-70b',
+    messages: []
   };
+
+  sendQuestion = e => {
+    //console.log('sendQuestion state', this.state);
+    const question = this.state.question;
+    console.log('sendQuestion question', question);
+  }
+
+  handleEnter = e => {
+    if (e.key == 'Enter') this.sendQuestion(null);
+  }
 
   render() {
     return (
@@ -41,11 +55,12 @@ export default class App extends React.Component {
         </Box>
 
         {/* Input bar */}
-        <Box>
+        <Box onKeyDown={this.handleEnter}>
           <p>
             <input type="text" id="inputQuestion" name="inputQuestion" placeholder="Ask…"
-            style={{minWidth: '90vw', minHeight: '40px'}} />
-            <IconButton>
+            style={{minWidth: '90vw', minHeight: '40px'}}
+            onChange={e=>this.setState({question: e.target.value})} />
+            <IconButton onClick={this.sendQuestion}>
               <PaperPlaneIcon />
             </IconButton>
           </p>
