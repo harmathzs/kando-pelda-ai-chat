@@ -2,10 +2,14 @@ import React from 'react';
 import { Flex, Box, Text, TextField, IconButton } from "@radix-ui/themes";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 //import './App.css';
+import groqApiKey from './groqkey';
 
 export default class App extends React.Component {
   state = {
-    conversation: [],
+    conversation: {
+      model: 'deepseek-r1-distill-llama-70b',
+      messages: [],
+    },
     question: '',
     answer: '',
     model: 'deepseek-r1-distill-llama-70b',
@@ -16,6 +20,28 @@ export default class App extends React.Component {
     //console.log('sendQuestion state', this.state);
     const question = this.state.question;
     console.log('sendQuestion question', question);
+
+    const requestBodyObj = {
+      model: "deepseek-r1-distill-llama-70b",
+      messages: [
+        {
+          role: "user",
+          content: question
+        }
+      ]
+    };
+    const requestBodyJson = JSON.stringify(requestBodyObj);
+
+    fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer '+groqApiKey
+      },
+      body: requestBodyJson
+    })
+    .then(res=>res.json())
+    .then(console.log)
+    .catch(console.warn);
   }
 
   handleEnter = e => {
@@ -48,9 +74,7 @@ export default class App extends React.Component {
           {this.state.conversation.length === 0 ? (
             <Text color="gray">No messages yet…</Text>
           ) : (
-            this.state.conversation.map((msg, i) => (
-              <Text key={i} as="p">{msg}</Text>
-            ))
+            JSON.stringify(this.state.conversation)
           )}
         </Box>
 
