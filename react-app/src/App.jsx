@@ -6,6 +6,9 @@ import { PaperPlaneIcon } from "@radix-ui/react-icons";
 export default class App extends React.Component {
   state = {
     conversation: [],
+    question: '',
+    answer: '',
+    isLoading: false,
   };
 
   render() {

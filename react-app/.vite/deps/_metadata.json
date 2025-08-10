@@ -2,7 +2,39 @@
   "hash": "2e1699ac",
   "configHash": "c55be593",
   "lockfileHash": "05c54dea",
-  "browserHash": "a24de197",
-  "optimized": {},
-  "chunks": {}
+  "browserHash": "d1d9880d",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "eca211f0",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "99305006",
+      "needsInterop": true
+    },
+    "@radix-ui/themes": {
+      "src": "../../node_modules/@radix-ui/themes/dist/esm/index.js",
+      "file": "@radix-ui_themes.js",
+      "fileHash": "3fc0084b",
+      "needsInterop": false
+    },
+    "@radix-ui/react-icons": {
+      "src": "../../node_modules/@radix-ui/react-icons/dist/react-icons.esm.js",
+      "file": "@radix-ui_react-icons.js",
+      "fileHash": "cfd30c3e",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-PC3BGCBX": {
+      "file": "chunk-PC3BGCBX.js"
+    },
+    "chunk-OWEWIHEO": {
+      "file": "chunk-OWEWIHEO.js"
+    }
+  }
 }
