@@ -11,9 +11,6 @@ export default class App extends React.Component {
       messages: [],
     },
     question: '',
-    answer: '',
-    model: 'deepseek-r1-distill-llama-70b',
-    messages: []
   };
 
   sendQuestion = e => {
@@ -40,7 +37,10 @@ export default class App extends React.Component {
       body: requestBodyJson
     })
     .then(res=>res.json())
-    .then(console.log)
+    .then(res=>{
+      console.log(res);
+      // TODO - append answer to messages[]
+    })
     .catch(console.warn);
   }
 
@@ -71,10 +71,10 @@ export default class App extends React.Component {
             backgroundColor: "#fafafa"
           }}
         >
-          {this.state.conversation.length === 0 ? (
+          {this.state.conversation.messages.length === 0 ? (
             <Text color="gray">No messages yet…</Text>
           ) : (
-            JSON.stringify(this.state.conversation)
+            JSON.stringify(this.state.conversation.messages)
           )}
         </Box>
 
