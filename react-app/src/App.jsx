@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Flex, Box, Text, TextField, IconButton, Spinner, ScrollArea } from "@radix-ui/themes";
-import { PaperPlaneIcon } from "@radix-ui/react-icons";
+import { Flex, Box, Text, TextField, IconButton, Spinner, ScrollArea, Strong } from "@radix-ui/themes";
+import { PaperPlaneIcon, FaceIcon } from "@radix-ui/react-icons";
 //import './App.css';
 import groqApiKey from './groqkey';
 
@@ -71,7 +71,7 @@ export default class App extends React.Component {
         {/* Header */}
         <Box>
           <Text size="4" weight="bold">
-            AI Chat
+            <Strong>AI Chat</Strong>
           </Text>
         </Box>
 
@@ -99,7 +99,7 @@ export default class App extends React.Component {
                 const cleaned = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
                 return (
                   <div key={i}>
-                    <h5>{msg.role}</h5>
+                    <h5><FaceIcon /> {msg.role}</h5>
                     <ReactMarkdown>{cleaned}</ReactMarkdown>
                   </div>
                 );
