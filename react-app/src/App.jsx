@@ -89,7 +89,7 @@ export default class App extends React.Component {
             backgroundColor: "#fafafa"
           }}
         >
-          <Box p="2">
+          <Box p="2" style={{padding: '2px'}}>
             {this.state.conversation.messages.length === 0 ? (
               <Text color="gray">No messages yet…</Text>
             ) : (
