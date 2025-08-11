@@ -94,6 +94,7 @@ export default class App extends React.Component {
               <Text color="gray">No messages yet…</Text>
             ) : (
               this.state.conversation.messages.map((msg, i) => {
+                if (i>=this.state.conversation.messages.length-2) {
                 // Remove <think>...</think>
                 const cleaned = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
                 return (
@@ -102,6 +103,7 @@ export default class App extends React.Component {
                     <ReactMarkdown>{cleaned}</ReactMarkdown>
                   </div>
                 );
+              } else return <div key={i}></div>
               })
             )}
           </Box>
