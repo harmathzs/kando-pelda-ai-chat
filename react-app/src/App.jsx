@@ -90,7 +90,12 @@ export default class App extends React.Component {
           {this.state.conversation.messages.length === 0 ? (
             <Text color="gray">No messages yet…</Text>
           ) : (
-            JSON.stringify(this.state.conversation.messages)
+            this.state.conversation.messages.map((msg, i)=>(
+              <div>
+                <h5 key={i}>{msg.role}</h5>
+                <p key={i}>{msg.content}</p>
+              </div>
+            ))
           )}
         </Box>
 
