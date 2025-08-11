@@ -18,15 +18,12 @@ export default class App extends React.Component {
     const question = this.state.question;
     console.log('sendQuestion question', question);
 
-    const requestBodyObj = {
-      model: "deepseek-r1-distill-llama-70b",
-      messages: [
-        {
+    const requestBodyObj = {...this.state.conversation};
+    requestBodyObj.messages.push({
           role: "user",
           content: question
-        }
-      ]
-    };
+        });
+    this.setState({conversation: {messages: [...requestBodyObj.messages]}});
     const requestBodyJson = JSON.stringify(requestBodyObj);
 
     fetch('https://api.groq.com/openai/v1/chat/completions', {
