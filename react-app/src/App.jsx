@@ -24,7 +24,13 @@ export default class App extends React.Component {
           role: "user",
           content: question
         });
-    this.setState({conversation: {messages: [...requestBodyObj.messages]}});
+    this.setState(prevState => ({
+      conversation: {
+        ...prevState.conversation, // keep model and other props
+        messages: [...requestBodyObj.messages]
+      }
+    }));
+
     const requestBodyJson = JSON.stringify(requestBodyObj);
 
     fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -38,9 +44,15 @@ export default class App extends React.Component {
     .then(res=>{
       console.log(res);
       // append answer to messages[]
-      this.setState({conversation: {messages: [...this.state.conversation.messages, 
-        res.choices[0].message
-      ]}});
+      this.setState(prevState => ({
+        conversation: {
+          ...prevState.conversation,
+          messages: [
+            ...prevState.conversation.messages,
+            res.choices[0].message
+          ]
+        }
+      }));
     })
     .catch(console.warn);
   }
