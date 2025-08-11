@@ -99,7 +99,7 @@ export default class App extends React.Component {
                 return (
                   <div key={i}>
                     <h5>{msg.role}</h5>
-                    <Text>{cleaned}</Text>
+                    <ReactMarkdown>{cleaned}</ReactMarkdown>
                   </div>
                 );
               })
