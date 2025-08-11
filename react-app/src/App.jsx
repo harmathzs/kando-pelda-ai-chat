@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import { Flex, Box, Text, TextField, IconButton, Spinner } from "@radix-ui/themes";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 //import './App.css';
@@ -93,7 +94,7 @@ export default class App extends React.Component {
             this.state.conversation.messages.map((msg, i)=>(
               <div key={i}>
                 <h5>{msg.role}</h5>
-                <p>{msg.content}</p>
+                <ReactMarkdown>{msg.content}</ReactMarkdown>
               </div>
             ))
           )}
