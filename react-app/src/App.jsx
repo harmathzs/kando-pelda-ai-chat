@@ -119,7 +119,7 @@ export default class App extends React.Component {
               <input type="text" id="inputQuestion" name="inputQuestion" placeholder="Ask…"
               style={{minWidth: '90vw', minHeight: '40px'}}
               onChange={e=>this.setState({question: e.target.value})} />
-              <IconButton onClick={this.sendQuestion}>
+              <IconButton onClick={this.sendQuestion} id='btnSend' name='btnSend' aria-label='btnSend'>
                 <PaperPlaneIcon />
               </IconButton>
             </p>
