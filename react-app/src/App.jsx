@@ -1,11 +1,12 @@
 import React from 'react';
-import { Flex, Box, Text, TextField, IconButton } from "@radix-ui/themes";
+import { Flex, Box, Text, TextField, IconButton, Spinner } from "@radix-ui/themes";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 //import './App.css';
 import groqApiKey from './groqkey';
 
 export default class App extends React.Component {
   state = {
+    isLoading: false,
     conversation: {
       model: 'deepseek-r1-distill-llama-70b',
       messages: [],
@@ -33,6 +34,7 @@ export default class App extends React.Component {
 
     const requestBodyJson = JSON.stringify(requestBodyObj);
 
+    this.setState({isLoading: true});
     fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -54,7 +56,8 @@ export default class App extends React.Component {
         }
       }));
     })
-    .catch(console.warn);
+    .catch(console.warn)
+    .finally(()=>this.setState({isLoading: false}));
   }
 
   handleEnter = e => {
@@ -91,17 +94,24 @@ export default class App extends React.Component {
           )}
         </Box>
 
-        {/* Input bar */}
-        <Box onKeyDown={this.handleEnter}>
-          <p>
-            <input type="text" id="inputQuestion" name="inputQuestion" placeholder="Ask…"
-            style={{minWidth: '90vw', minHeight: '40px'}}
-            onChange={e=>this.setState({question: e.target.value})} />
-            <IconButton onClick={this.sendQuestion}>
-              <PaperPlaneIcon />
-            </IconButton>
-          </p>
-        </Box>
+        {/* Input bar or Spinner */}
+
+        {this.state.isLoading ? <p>&#x23F3; LOADING &#x23F3; </p> :
+
+          <Box onKeyDown={this.handleEnter}>
+            <p>
+              <input type="text" id="inputQuestion" name="inputQuestion" placeholder="Ask…"
+              style={{minWidth: '90vw', minHeight: '40px'}}
+              onChange={e=>this.setState({question: e.target.value})} />
+              <IconButton onClick={this.sendQuestion}>
+                <PaperPlaneIcon />
+              </IconButton>
+            </p>
+          </Box>
+
+        }
+
+
       </Flex>
     );
   }
