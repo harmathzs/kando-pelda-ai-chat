@@ -91,9 +91,9 @@ export default class App extends React.Component {
             <Text color="gray">No messages yet…</Text>
           ) : (
             this.state.conversation.messages.map((msg, i)=>(
-              <div>
-                <h5 key={i}>{msg.role}</h5>
-                <p key={i}>{msg.content}</p>
+              <div key={i}>
+                <h5>{msg.role}</h5>
+                <p>{msg.content}</p>
               </div>
             ))
           )}
