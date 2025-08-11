@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Flex, Box, Text, TextField, IconButton, Spinner } from "@radix-ui/themes";
+import { Flex, Box, Text, TextField, IconButton, Spinner, ScrollArea } from "@radix-ui/themes";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 //import './App.css';
 import groqApiKey from './groqkey';
@@ -76,32 +76,37 @@ export default class App extends React.Component {
         </Box>
 
         {/* Conversation area */}
-        <Box
-          flex="1" // fills remaining available space
+        <ScrollArea 
+          type="always" 
+          scrollbars="vertical"
           style={{
-            minWidth: 1024,
-            minHeight: 600,
+            flex: 1,                    // fills remaining height
+            minWidth: "1024px",
+            minHeight: '600px',
+            maxHeight: '600px',
             border: "1px solid #ccc",
             borderRadius: 8,
-            padding: "8px",
-            overflowY: "auto",
             backgroundColor: "#fafafa"
           }}
         >
-          {this.state.conversation.messages.length === 0 ? (
-            <Text color="gray">No messages yet…</Text>
-          ) : (
-            this.state.conversation.messages.map((msg, i) => {
-              const cleanedContent = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
-              return (
-                <div key={i}>
-                  <h5>{msg.role}</h5>
-                  <ReactMarkdown>{cleanedContent}</ReactMarkdown>
-                </div>
-              );
-            })
-          )}
-        </Box>
+          <Box p="2">
+            {this.state.conversation.messages.length === 0 ? (
+              <Text color="gray">No messages yet…</Text>
+            ) : (
+              this.state.conversation.messages.map((msg, i) => {
+                // Remove <think>...</think>
+                const cleaned = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
+                return (
+                  <div key={i}>
+                    <h5>{msg.role}</h5>
+                    <Text>{cleaned}</Text>
+                  </div>
+                );
+              })
+            )}
+          </Box>
+        </ScrollArea>
+
 
         {/* Input bar or Spinner */}
 
