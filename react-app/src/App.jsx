@@ -91,12 +91,15 @@ export default class App extends React.Component {
           {this.state.conversation.messages.length === 0 ? (
             <Text color="gray">No messages yet…</Text>
           ) : (
-            this.state.conversation.messages.map((msg, i)=>(
-              <div key={i}>
-                <h5>{msg.role}</h5>
-                <ReactMarkdown>{msg.content}</ReactMarkdown>
-              </div>
-            ))
+            this.state.conversation.messages.map((msg, i) => {
+              const cleanedContent = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
+              return (
+                <div key={i}>
+                  <h5>{msg.role}</h5>
+                  <ReactMarkdown>{cleanedContent}</ReactMarkdown>
+                </div>
+              );
+            })
           )}
         </Box>
 
