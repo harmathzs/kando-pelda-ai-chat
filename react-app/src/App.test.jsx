@@ -1,5 +1,6 @@
-import { test, expect } from 'vitest';
+import { test, expect, act } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import App from './App';
 
 test('renders AI Chat heading', () => {
@@ -13,7 +14,7 @@ test('renders No messages yet message', () => {
 });
 
 test('clicks send button', async ()=>{
-    const {getByRole} = render(<App />);
-    console.log(getByRole);
-    await getByRole('button', {name: 'btnSend'}).click();
+  const { getByRole } = render(<App />);
+  const sendButton = getByRole('button', { name: 'btnSend' });
+  await userEvent.click(sendButton); 
 });
