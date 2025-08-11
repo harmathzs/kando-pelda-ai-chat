@@ -19,6 +19,7 @@ export default class App extends React.Component {
     console.log('sendQuestion question', question);
 
     const requestBodyObj = {...this.state.conversation};
+    // append question to messages[]
     requestBodyObj.messages.push({
           role: "user",
           content: question
@@ -36,7 +37,10 @@ export default class App extends React.Component {
     .then(res=>res.json())
     .then(res=>{
       console.log(res);
-      // TODO - append answer to messages[]
+      // append answer to messages[]
+      this.setState({conversation: {messages: [...this.state.conversation.messages, 
+        res.choices[0].message
+      ]}});
     })
     .catch(console.warn);
   }
