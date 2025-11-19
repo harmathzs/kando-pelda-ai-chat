@@ -1,9 +1,10 @@
+// TODO - npm i cors react-markdown @radix-ui/themes @radix-ui/react-icons
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Flex, Box, Text, TextField, IconButton, Spinner, ScrollArea, Strong } from "@radix-ui/themes";
 import { PaperPlaneIcon, FaceIcon } from "@radix-ui/react-icons";
 //import './App.css';
-import groqApiKey from './groqkey';
+import groqApiKey from './groqkey'; // TODO fill API key
 
 export default class App extends React.Component {
   state = {
@@ -17,25 +18,16 @@ export default class App extends React.Component {
 
   sendQuestion = () => {
     //console.log('sendQuestion state', this.state);
-    const question = this.state.question;
-    console.log('sendQuestion question', question);
+    const question = 'TODO state question';
+    //console.log('sendQuestion question', question);
 
-    const requestBodyObj = {...this.state.conversation};
-    // append question to messages[]
-    requestBodyObj.messages.push({
-          role: "user",
-          content: question
-        });
-    this.setState(prevState => ({
-      conversation: {
-        ...prevState.conversation, // keep model and other props
-        messages: [...requestBodyObj.messages]
-      }
-    }));
+    const requestBodyObj = 'TODO state conversation';
+    // TODO append question to messages[]
+    // TODO save conversation to state
 
     const requestBodyJson = JSON.stringify(requestBodyObj);
 
-    this.setState({isLoading: true});
+    // TODO start spinner
     fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -46,16 +38,8 @@ export default class App extends React.Component {
     .then(res=>res.json())
     .then(res=>{
       console.log(res);
-      // append answer to messages[]
-      this.setState(prevState => ({
-        conversation: {
-          ...prevState.conversation,
-          messages: [
-            ...prevState.conversation.messages,
-            res.choices[0].message
-          ]
-        }
-      }));
+      // TODO append answer to messages[]
+
     })
     .catch(console.warn)
     .finally(()=>this.setState({isLoading: false}));
@@ -77,12 +61,10 @@ export default class App extends React.Component {
 
         {/* Conversation area */}
         <div 
-          type="always" 
-          scrollbars="vertical"
           style={{
-            flex: 1,                    // fills remaining height
-            overflowY: 'auto',
-            height: '600px',
+            flex: 1,                    
+            overflowY: 'auto', // makes content scrollable
+            height: '600px', // if overflows this
             
             border: "1px solid #ccc",
             borderRadius: 8,
@@ -99,8 +81,8 @@ export default class App extends React.Component {
                 const cleaned = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
                 return (
                   <div key={i}>
-                    <h5><FaceIcon /> {msg.role}</h5>
-                    <ReactMarkdown>{cleaned}</ReactMarkdown>
+                    <h5>TODO - Face icon {msg.role}</h5>
+                    TODO - use react markdown for: {cleaned}
                   </div>
                 );
               } else return <div key={i}></div>
@@ -112,7 +94,7 @@ export default class App extends React.Component {
 
         {/* Input bar or Spinner */}
 
-        {this.state.isLoading ? <p>&#x23F3; LOADING &#x23F3; </p> :
+        {this.state.isLoading ? <p>&#x23F3; TODO - custom spinner &#x23F3; </p> :
 
           <Box onKeyDown={this.handleEnter}>
             <p>
@@ -120,7 +102,7 @@ export default class App extends React.Component {
               style={{minWidth: '90vw', minHeight: '40px'}}
               onChange={e=>this.setState({question: e.target.value})} />
               <IconButton onClick={this.sendQuestion} id='btnSend' name='btnSend' aria-label='btnSend'>
-                <PaperPlaneIcon />
+                TODO - Paper plane icon
               </IconButton>
             </p>
           </Box>
