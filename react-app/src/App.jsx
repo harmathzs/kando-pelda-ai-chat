@@ -9,13 +9,13 @@ export default class App extends React.Component {
   state = {
     isLoading: false,
     conversation: {
-      model: 'deepseek-r1-distill-llama-70b',
+      model: 'groq/compound-mini',
       messages: [],
     },
     question: '',
   };
 
-  sendQuestion = e => {
+  sendQuestion = () => {
     //console.log('sendQuestion state', this.state);
     const question = this.state.question;
     console.log('sendQuestion question', question);
