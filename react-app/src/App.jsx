@@ -9,7 +9,7 @@ export default class App extends React.Component {
   state = {
     isLoading: false,
     conversation: {
-      model: 'groq/compound-mini',
+      model: 'llama-3.1-8b-instant',
       messages: [],
     },
     question: '',
@@ -76,14 +76,14 @@ export default class App extends React.Component {
         </Box>
 
         {/* Conversation area */}
-        <ScrollArea 
+        <div 
           type="always" 
           scrollbars="vertical"
           style={{
             flex: 1,                    // fills remaining height
-            minWidth: "1024px",
-            minHeight: '600px',
-            maxHeight: '600px',
+            overflowY: 'auto',
+            height: '600px',
+            
             border: "1px solid #ccc",
             borderRadius: 8,
             backgroundColor: "#fafafa"
@@ -94,7 +94,7 @@ export default class App extends React.Component {
               <Text color="gray">No messages yet…</Text>
             ) : (
               this.state.conversation.messages.map((msg, i) => {
-                if (i>=this.state.conversation.messages.length-2) {
+                if (true || i>=this.state.conversation.messages.length-2) {
                 // Remove <think>...</think>
                 const cleaned = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
                 return (
@@ -107,7 +107,7 @@ export default class App extends React.Component {
               })
             )}
           </Box>
-        </ScrollArea>
+        </div>
 
 
         {/* Input bar or Spinner */}
