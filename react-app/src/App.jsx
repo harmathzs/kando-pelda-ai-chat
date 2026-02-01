@@ -36,6 +36,12 @@ export default class App extends React.Component {
     requestBodyObj.messages.push({role: 'user', content: question})
     //console.log('requestBodyObj', requestBodyObj)
 
+    await fetch('http://localhost:3333/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({role: 'user', message_content: question})
+    })
+
     const mistralClient = this.state.mistralClient;
     this.setState({isLoading: true});
     const chatResponse = await mistralClient.chat.complete(requestBodyObj);
@@ -47,6 +53,13 @@ export default class App extends React.Component {
       {role: 'assistant', content: chatResponse.choices[0].message.content}
     ];
     //console.log('updatedMessages', updatedMessages)
+
+    await fetch('http://localhost:3333/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({role: 'assistant', message_content: chatResponse.choices[0].message.content})
+    })
+
     this.setState({conversation: {...this.state.conversation, messages: updatedMessages}});    
   }
 
