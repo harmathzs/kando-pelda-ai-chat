@@ -3,62 +3,44 @@ import ReactMarkdown from 'react-markdown';
 import { Flex, Box, Text, TextField, IconButton, Spinner, ScrollArea, Strong } from "@radix-ui/themes";
 import { PaperPlaneIcon, FaceIcon } from "@radix-ui/react-icons";
 //import './App.css';
-import groqApiKey from './groqkey';
+import { Mistral } from '@mistralai/mistralai';
 
 export default class App extends React.Component {
   state = {
     isLoading: false,
+    mistralAiApiKey: '',
+    mistralClient: null,
     conversation: {
-      model: 'llama-3.1-8b-instant',
+      model: 'devstral-small-latest',
       messages: [],
     },
     question: '',
   };
 
-  sendQuestion = () => {
+  componentDidMount() {
+    const mistralAiApiKey = import.meta.env.VITE_MISTRAL_AI_API_KEY
+    // console.log('mistralAiApiKey.length', mistralAiApiKey.length) // 32
+
+    this.mistralClient = new Mistral({apiKey: mistralAiApiKey});
+    console.log('mistralClient', this.mistralClient)
+
+    this.setState({mistralAiApiKey, mistralClient: this.mistralClient})
+  }
+
+  sendQuestion = async () => {
     //console.log('sendQuestion state', this.state);
     const question = this.state.question;
     console.log('sendQuestion question', question);
 
     const requestBodyObj = {...this.state.conversation};
-    // append question to messages[]
-    requestBodyObj.messages.push({
-          role: "user",
-          content: question
-        });
-    this.setState(prevState => ({
-      conversation: {
-        ...prevState.conversation, // keep model and other props
-        messages: [...requestBodyObj.messages]
-      }
-    }));
+    requestBodyObj.messages.push({role: 'user', content: question})
+    console.log('requestBodyObj', requestBodyObj)
 
     const requestBodyJson = JSON.stringify(requestBodyObj);
-
-    this.setState({isLoading: true});
-    fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer '+groqApiKey
-      },
-      body: requestBodyJson
-    })
-    .then(res=>res.json())
-    .then(res=>{
-      console.log(res);
-      // append answer to messages[]
-      this.setState(prevState => ({
-        conversation: {
-          ...prevState.conversation,
-          messages: [
-            ...prevState.conversation.messages,
-            res.choices[0].message
-          ]
-        }
-      }));
-    })
-    .catch(console.warn)
-    .finally(()=>this.setState({isLoading: false}));
+    //this.setState({isLoading: true});
+    const mistralClient = this.state.mistralClient;
+    const chatResponse = await mistralClient.chat.complete(requestBodyObj);
+    console.log('chatResponse', chatResponse)
   }
 
   handleEnter = e => {
