@@ -19,10 +19,10 @@ export default class App extends React.Component {
 
   componentDidMount() {
     const mistralAiApiKey = import.meta.env.VITE_MISTRAL_AI_API_KEY
-    // console.log('mistralAiApiKey.length', mistralAiApiKey.length) // 32
+    // console.log('mistralAiApiKey.length', mistralAiApiKey.length) // should be around 32
 
     this.mistralClient = new Mistral({apiKey: mistralAiApiKey});
-    console.log('mistralClient', this.mistralClient)
+    // console.log('mistralClient', this.mistralClient)
 
     this.setState({mistralAiApiKey, mistralClient: this.mistralClient})
   }
@@ -30,21 +30,28 @@ export default class App extends React.Component {
   sendQuestion = async () => {
     //console.log('sendQuestion state', this.state);
     const question = this.state.question;
-    console.log('sendQuestion question', question);
+    //console.log('sendQuestion question', question);
 
     const requestBodyObj = {...this.state.conversation};
     requestBodyObj.messages.push({role: 'user', content: question})
-    console.log('requestBodyObj', requestBodyObj)
+    //console.log('requestBodyObj', requestBodyObj)
 
-    const requestBodyJson = JSON.stringify(requestBodyObj);
-    //this.setState({isLoading: true});
     const mistralClient = this.state.mistralClient;
+    this.setState({isLoading: true});
     const chatResponse = await mistralClient.chat.complete(requestBodyObj);
-    console.log('chatResponse', chatResponse)
+    this.setState({isLoading: false});
+    //console.log('chatResponse', chatResponse)
+
+    // Update conversation with response
+    const updatedMessages = [...requestBodyObj.messages, 
+      {role: 'assistant', content: chatResponse.choices[0].message.content}
+    ];
+    //console.log('updatedMessages', updatedMessages)
+    this.setState({conversation: {...this.state.conversation, messages: updatedMessages}});    
   }
 
   handleEnter = e => {
-    if (e.key == 'Enter') this.sendQuestion(null);
+    if (e.key == 'Enter') this.sendQuestion();
   }
 
   render() {
@@ -76,7 +83,7 @@ export default class App extends React.Component {
               <Text color="gray">No messages yet…</Text>
             ) : (
               this.state.conversation.messages.map((msg, i) => {
-                if (true || i>=this.state.conversation.messages.length-2) {
+
                 // Remove <think>...</think>
                 const cleaned = msg.content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
                 return (
@@ -85,7 +92,7 @@ export default class App extends React.Component {
                     <ReactMarkdown>{cleaned}</ReactMarkdown>
                   </div>
                 );
-              } else return <div key={i}></div>
+
               })
             )}
           </Box>
