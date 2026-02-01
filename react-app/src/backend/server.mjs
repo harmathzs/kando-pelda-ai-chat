@@ -1,4 +1,5 @@
-/** server contains endpoint definitions, index listens */
+/** server.mjs */
+/* server contains endpoint definitions, index listens */
 /* test this and not index.mjs! */
 import express from 'express'
 import cors from 'cors'
