@@ -30,8 +30,8 @@ app.get('/messages', async (req, res)=>{
 
 app.post('/messages', async (req, res)=>{
     try {
-        const {id, thread_id, role, message_content} = req.body
-        const values = [id, thread_id, role, message_content]
+        const {role, message_content} = req.body
+        const values = [role, message_content]
         const sql = 'INSERT INTO chat_completions (`role`, `message_content`) VALUES (?, ?)'
         const [result, fields] = await connection.execute(sql, values)
         console.log('result', result)
