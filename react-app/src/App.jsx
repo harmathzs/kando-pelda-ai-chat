@@ -1,3 +1,4 @@
+/** App.jsx - TODO - import dependant modules */
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Flex, Box, Text, TextField, IconButton, Spinner, ScrollArea, Strong } from "@radix-ui/themes";
@@ -5,6 +6,7 @@ import { PaperPlaneIcon, FaceIcon } from "@radix-ui/react-icons";
 //import './App.css';
 import { Mistral } from '@mistralai/mistralai';
 
+/* TODO - obtain Mistral API key */
 export default class App extends React.Component {
   state = {
     isLoading: false,
@@ -18,10 +20,10 @@ export default class App extends React.Component {
   };
 
   componentDidMount() {
-    const mistralAiApiKey = import.meta.env.VITE_MISTRAL_AI_API_KEY
+    const mistralAiApiKey = import.meta.env.VITE_MISTRAL_AI_API_KEY // TODO - set in .env var
     // console.log('mistralAiApiKey.length', mistralAiApiKey.length) // should be around 32
 
-    this.mistralClient = new Mistral({apiKey: mistralAiApiKey});
+    this.mistralClient = 'TODO read https://docs.mistral.ai/api/endpoint/chat '
     // console.log('mistralClient', this.mistralClient)
 
     this.setState({mistralAiApiKey, mistralClient: this.mistralClient})
@@ -29,38 +31,28 @@ export default class App extends React.Component {
 
   sendQuestion = async () => {
     //console.log('sendQuestion state', this.state);
-    const question = this.state.question;
+    const question = 'TODO'
     //console.log('sendQuestion question', question);
 
     const requestBodyObj = {...this.state.conversation};
-    requestBodyObj.messages.push({role: 'user', content: question})
+    requestBodyObj.messages.push({role: 'user', content: 'TODO'})
     //console.log('requestBodyObj', requestBodyObj)
 
-    await fetch('http://localhost:3333/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({role: 'user', message_content: question})
-    })
+    // TODO - callout to POST /messages
 
     const mistralClient = this.state.mistralClient;
-    this.setState({isLoading: true});
-    const chatResponse = await mistralClient.chat.complete(requestBodyObj);
-    this.setState({isLoading: false});
+    // TODO - show spinner here
+    let chatResponse = 'TODO read https://docs.mistral.ai/api/endpoint/chat '
+    // TODO - stop spinner here
     //console.log('chatResponse', chatResponse)
 
-    // Update conversation with response
-    const updatedMessages = [...requestBodyObj.messages, 
-      {role: 'assistant', content: chatResponse.choices[0].message.content}
-    ];
+    // TODO - Update conversation with response
+    let updatedMessages = 'TODO'
     //console.log('updatedMessages', updatedMessages)
 
-    await fetch('http://localhost:3333/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({role: 'assistant', message_content: chatResponse.choices[0].message.content})
-    })
+    // TODO - callout to POST /messages
 
-    this.setState({conversation: {...this.state.conversation, messages: updatedMessages}});    
+    // TODO - setState
   }
 
   handleEnter = e => {

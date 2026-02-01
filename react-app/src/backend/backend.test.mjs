@@ -5,7 +5,7 @@ import { app, port, connection } from './server.mjs';
 
 // Mock the database connection with the correct default export
 vi.mock('mysql2/promise', () => {
-  const mockConnection = {
+  const mockConnection = { 
     query: vi.fn(),
     execute: vi.fn()
   };

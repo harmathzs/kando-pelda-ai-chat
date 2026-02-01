@@ -1,3 +1,4 @@
+/** index.mjs */
 import { app, port, connection } from "./server.mjs"
 
 app.listen(port, (error)=>{
