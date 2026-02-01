@@ -1,53 +1,54 @@
 /** backend.test.mjs */
-import { vi } from 'vitest'
-//import { app, port, connection } from "./server.mjs";
-import request from 'supertest'
+import { vi } from 'vitest';
+import request from 'supertest';
+import { app, port, connection } from './server.mjs';
 
-// Mock module
-vi.mock('./server.mjs', () => {
+// Mock the database connection with the correct default export
+vi.mock('mysql2/promise', () => {
+  const mockConnection = {
+    query: vi.fn(),
+    execute: vi.fn()
+  };
   return {
-    app: {}, // Provide a mock for app
-    port: 3333, // Provide a mock for port
-    connection: {
-      execute: vi.fn()
+    default: {
+      createConnection: vi.fn().mockResolvedValue(mockConnection)
     }
   };
 });
 
-describe('Server connections', ()=>{
-    test('backend port', async ()=>{
-        const {app, port, connection} = await import('./server.mjs')
-        expect(port).toBeGreaterThanOrEqual(0+1)
-    })
-    test('MySQL connection', async ()=>{
-        const {app, port, connection} = await import('./server.mjs')
-        expect(connection).not.toBeNull()
-    })
-    test('app', async ()=>{
-        const {app, port, connection} = await import('./server.mjs')
-        expect(app).not.toBeNull()
-    })    
-})
+describe('Server connections', () => {
+  test('backend port', async () => {
+    expect(port).toBeGreaterThanOrEqual(1);
+  });
 
-describe('Raw test endpoints', ()=>{
-    test('GET /messages', async ()=>{
-        // normal test
-        const {app, port, connection} = await import('./server.mjs')
-        const res = await request(app).get('/messages')
-        expect(res).not.toBeNull()
-    })
-})
+  test('MySQL connection', async () => {
+    expect(connection).not.toBeNull();
+  });
 
+  test('app', async () => {
+    expect(app).not.toBeNull();
+  });
+});
 
+describe('Raw test endpoints', () => {
+  test('GET /messages', async () => {
+    const mockResults = [{ id: 1, thread_id: 1, role: 'user', message_content: 'Hello' }];
+    const mockFields = [];
+    connection.query.mockResolvedValue([mockResults, mockFields]);
+
+    const res = await request(app).get('/messages');
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('results');
+    expect(res.body).toHaveProperty('fields');
+  });
+});
 
 describe('POST /messages', () => {
   beforeEach(() => {
-    // Clear all instances and calls to constructor and all methods:
-    // TODO - jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should insert a message with valid data', async () => {
-    // Mock the database response
     const mockResult = { insertId: 1, affectedRows: 1 };
     connection.execute.mockResolvedValue([mockResult, []]);
 
@@ -65,7 +66,8 @@ describe('POST /messages', () => {
   });
 
   it('should return 400 for invalid data', async () => {
-    
+    connection.execute.mockRejectedValue(new Error('Invalid data'));
+
     const response = await request(app)
       .post('/messages')
       .send({ role: 'user' }) // Missing message_content
